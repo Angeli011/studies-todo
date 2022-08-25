@@ -20,9 +20,8 @@ export default function Cronometro({ selecionado }: Props) {
     return (
         <div className={style.cronometro}>
             <p className={style.titulo}>Choose a task to start</p>
-            Time: {tempo}
             <div className={style.relogioWrapper}>
-                <Clock />
+                <Clock tempo={tempo}/>
             </div>
             <Button>
                 Start
