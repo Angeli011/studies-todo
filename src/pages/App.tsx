@@ -7,11 +7,24 @@ import style from './App.module.scss';
 
 function App() {
   const [tasks, setTasks] = useState<ITask[]>([]);
+  const [selecionado, setSelecionado] = useState<ITask>();
+
+  function selecionaTarefa(tarefaSelecionada: ITask) {
+    setSelecionado(tarefaSelecionada);
+    setTasks(tarefasAnteriores => tarefasAnteriores.map(task => ({
+      ...task,
+      selecionado: task.id === tarefaSelecionada.id ? true : false
+    })))
+  }
+
   return (
     <div className={style.AppStyle}>
       <Form setTasks={setTasks}/>
-      <List tasks={tasks}/>
-      <Cronometro />
+      <List 
+        tasks={tasks}
+        selecionaTarefa={selecionaTarefa}
+      />
+      <Cronometro selecionado={selecionado}/>
     </div>
   );
 }
