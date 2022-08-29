@@ -1,30 +1,49 @@
 import React, { useState } from 'react';
 import Cronometro from '../components/Cronometro';
-import Form from '../components/Form';
-import List from '../components/List';
-import { ITask } from '../types/task';
+import Formulario from '../components/Formulario';
+import Lista from '../components/Lista';
+import { ITarefa } from '../types/tarefa';
 import style from './App.module.scss';
 
 function App() {
-  const [tasks, setTasks] = useState<ITask[]>([]);
-  const [selecionado, setSelecionado] = useState<ITask>();
+  const [tarefas, setTarefas] = useState<ITarefa[]>([]);
+  const [selecionado, setSelecionado] = useState<ITarefa>();
 
-  function selecionaTarefa(tarefaSelecionada: ITask) {
+  function selecionaTarefa(tarefaSelecionada: ITarefa) {
     setSelecionado(tarefaSelecionada);
-    setTasks(tarefasAnteriores => tarefasAnteriores.map(task => ({
-      ...task,
-      selecionado: task.id === tarefaSelecionada.id ? true : false
+    setTarefas(tarefasAnteriores => tarefasAnteriores.map(tarefa => ({
+      ...tarefa,
+      selecionado: tarefa.id === tarefaSelecionada.id ? true : false
     })))
+  }
+
+  function finalizarTarefa() {
+    if(selecionado) {
+      setSelecionado(undefined);
+      setTarefas(tarefasAnteriores => tarefasAnteriores.map(tarefa => {
+        if(tarefa.id === selecionado.id) {
+          return {
+            ...tarefa,
+            selecionado: false,
+            completado: true
+          }
+        }
+        return tarefa;
+      }))
+    }
   }
 
   return (
     <div className={style.AppStyle}>
-      <Form setTasks={setTasks}/>
-      <List 
-        tasks={tasks}
+      <Formulario setTarefas={setTarefas} />
+      <Lista
+        tarefas={tarefas}
         selecionaTarefa={selecionaTarefa}
       />
-      <Cronometro selecionado={selecionado}/>
+      <Cronometro
+        selecionado={selecionado}
+        finalizarTarefa={finalizarTarefa}
+      />
     </div>
   );
 }
